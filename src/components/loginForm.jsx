@@ -84,7 +84,6 @@ class LoginForm extends Component {
     if (auth.getCurrentUser()) return <Redirect to="/" />;
 
     const { data } = this.state;
-    console.log(this.state.errors);
 
     return (
       <form onSubmit={this.handleSubmit}>

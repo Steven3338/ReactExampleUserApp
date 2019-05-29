@@ -19,8 +19,7 @@ class AddressForm extends Form {
       country: "",
       moveInDate: "",
       moveOutDate: "",
-      userId: 0,
-      id: 0
+      userId: ""
     },
     errors: {}
   };
@@ -54,19 +53,17 @@ class AddressForm extends Form {
       //   .max(this.todaysDate)
       .allow("")
       .label("Move out Date"),
-    userId: Joi.number().required(),
-    id: Joi.number().required()
+    userId: Joi.number().allow("")
+    // id: Joi.number().allow("")
   };
 
   async componentDidMount() {
     if (this.props.match.params.id !== "new") {
-      try {
-        const promise = await auth.getAddress(this.props.match.params.id);
-        console.log(promise);
-        this.setState({ data: promise.data });
-      } catch (ex) {
-        this.setState({ error: ex });
-      }
+      const newSchema = { ...this.schema, id: Joi.number() };
+      this.schema = newSchema;
+      const promise = await auth.getAddress(this.props.match.params.id);
+
+      this.setState({ data: promise.data });
     }
   }
 
@@ -78,9 +75,14 @@ class AddressForm extends Form {
   }
 
   doSubmit = async () => {
+    if (this.state.data.userId === "") {
+      const user = auth.getCurrentUser();
+      const address = { ...this.state.data };
+      address.userId = user.id;
+      await this.setState({ data: address });
+    }
     try {
-      const address = this.state.data;
-      await auth.updateAddress(this.props.match.params.id, address);
+      await auth.updateAddress(this.props.match.params.id, this.state.data);
       window.location = "/profile";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
@@ -93,7 +95,6 @@ class AddressForm extends Form {
 
   render() {
     const { data } = this.state;
-    // console.log(this.states.data);
     return (
       <React.Fragment>
         <form onSubmit={this.handleSubmit}>

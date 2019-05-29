@@ -95,12 +95,11 @@ class CaseFormExisting extends Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <div>
         <h1>
           Case Status{" "}
-          {this.state.case.timeToResolution !== null ? "Closed" : "Open"}
+          {this.state.case.timeToResolution !== "" ? "Closed" : "Open"}
         </h1>
         {this.renderValueComponent(this.state.case.subject, "Subject")}
         {this.renderValueComponent(

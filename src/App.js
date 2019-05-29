@@ -51,7 +51,7 @@ class App extends Component {
             />
             <ProtectedRoute path="/users/" component={Users} />
             <ProtectedRoute path="/profile/:id" component={AddressForm} />
-            <ProtectedRoute path="/profile/new" component={AddressForm} />
+            {/* <ProtectedRoute path="/profile/new" component={AddressForm} /> */}
             <ProtectedRoute path="/profile/" component={ProfileForm} />
             <Route path="/register/" component={RegisterForm} />
             <Route path="/login/" component={LoginForm} />
