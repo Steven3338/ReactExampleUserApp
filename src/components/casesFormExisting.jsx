@@ -96,11 +96,12 @@ class CaseFormExisting extends Component {
   };
 
   render() {
+    console.log(this.state.case);
     return (
       <div>
         <h1>
           Case Status{" "}
-          {this.state.case.timeToResolution !== null ? "Closed" : "Open"}
+          {this.state.case.timeToResolution !== "" ? "Closed" : "Open"}
         </h1>
         {this.renderValueComponent(this.state.case.subject, "Subject")}
         {this.renderValueComponent(
@@ -113,7 +114,7 @@ class CaseFormExisting extends Component {
             : "Case is Currently Open",
           "Case Closed On"
         )}
-        {this.state.case.timeToResolution !== null
+        {this.state.case.timeToResolution !== ""
           ? this.renderValueComponent(
               `User Id: ${this.state.case.closedById}`,
               "Case Closed By"
@@ -129,7 +130,7 @@ class CaseFormExisting extends Component {
             <p className="form-control">{m.messageText}</p>
           </div>
         ))}
-        {this.state.case.timeToResolution === null ? (
+        {this.state.case.timeToResolution === "" ? (
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label htmlFor="newMessage">
@@ -157,7 +158,7 @@ class CaseFormExisting extends Component {
             </button>
           </form>
         ) : null}
-        {this.state.case.timeToResolution === null ? (
+        {this.state.case.timeToResolution === "" ? (
           <button
             type="submit"
             className="btn btn-primary"
