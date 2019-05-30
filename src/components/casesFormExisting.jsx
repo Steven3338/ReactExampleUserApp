@@ -107,7 +107,6 @@ class CaseFormExisting extends Component {
   };
 
   render() {
-    console.log(this.state.case.timeToResolution);
     return (
       <div>
         <h1>

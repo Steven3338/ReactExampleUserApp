@@ -70,9 +70,6 @@ class AddressForm extends Form {
   }
 
   doSubmit = async () => {
-    console.log("Hello from the address form");
-    console.log(this.props.match.params.id);
-    console.log(this.state.data);
     if (this.props.match.params.id === "new") {
       const user = auth.getCurrentUser();
       const data = { ...this.state.data };
@@ -81,7 +78,6 @@ class AddressForm extends Form {
     }
     try {
       const promise = await auth.updateAddress(this.state.data);
-      console.log(promise);
       window.location = "/profile";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
