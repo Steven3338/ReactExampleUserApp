@@ -172,6 +172,13 @@ class ProfileForm extends Form {
           Add Address
         </Link>
         {this.renderAddressTable(this.state.addresses)}
+        <button
+          type="submit"
+          className="btn btn-primary"
+          onClick={() => this.props.history.replace("/")}
+        >
+          Return to Home
+        </button>
       </React.Fragment>
     );
   }

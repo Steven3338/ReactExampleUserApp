@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { toast } from "react-toastify";
 import auth from "../services/authServices";
-import Joi from "joi-browser";
 
 class CaseFormExisting extends Component {
   state = {
@@ -25,16 +24,6 @@ class CaseFormExisting extends Component {
     closedBy: { userId: "" },
     from: {}
   };
-
-  // schema = {
-  //   id: Joi.number().optional(),
-  //   subject: Joi.string()
-  //     .required()
-  //     .label("Subject"),
-  //   dateTimeOfInitialMessage: Joi.string().Optional,
-  //   timeToResolution: Joi.string().allow(""),
-  //   closedById: Joi.allow("")
-  // };
 
   async componentDidMount() {
     const promise = await this.handleCaseObject();
@@ -160,7 +149,7 @@ class CaseFormExisting extends Component {
               />
             </div>
             <button
-              disabled={this.state.newMessage.messageText === null}
+              disabled={this.state.newMessage.messageText === ""}
               className="btn btn-primary"
               style={{ marginBottom: 20 }}
             >
