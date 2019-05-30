@@ -23,7 +23,8 @@ class CaseFormNew extends Component {
 
   doSubmit = async () => {
     const promise = await auth.postNewCase(this.state.data);
-    promise && this.props.history.push(`/users/cases/${promise.data.id}`);
+    console.log(promise);
+    if (promise) this.props.history.push(`/users/cases/${promise.data.id}`);
   };
 
   render() {

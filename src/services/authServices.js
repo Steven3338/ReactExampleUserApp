@@ -145,21 +145,29 @@ export function getAddress(id) {
   }
 }
 
-export function updateAddress(path, data) {
+export function updateAddress(data) {
   const jwt = getJwt();
-  if (path !== "new") {
+  if (data.id) {
     try {
-      http.put(`${apiEndPointForUserAddresses}/${path}`, data, {
-        headers: { Authorization: `Bearer ${jwt}` }
-      });
-    } catch (error) {}
+      const promise = http.put(
+        `${apiEndPointForUserAddresses}/${data.id}`,
+        data,
+        {
+          headers: { Authorization: `Bearer ${jwt}` }
+        }
+      );
+      return promise;
+    } catch (error) {
+      return null;
+    }
   }
-  if (path === "new") {
-    try {
-      http.post(`${apiEndPointForUserAddresses}`, data, {
-        headers: { Authorization: `Bearer ${jwt}` }
-      });
-    } catch (error) {}
+  try {
+    const promise = http.post(`${apiEndPointForUserAddresses}`, data, {
+      headers: { Authorization: `Bearer ${jwt}` }
+    });
+    return promise;
+  } catch (error) {
+    return null;
   }
 }
 

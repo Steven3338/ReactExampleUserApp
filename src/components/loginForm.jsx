@@ -116,7 +116,7 @@ class LoginForm extends Component {
             onChange={this.handleChange}
             id="password"
             name="password"
-            type="text"
+            type="password"
             className="form-control"
             // placeholder="Password"
           />

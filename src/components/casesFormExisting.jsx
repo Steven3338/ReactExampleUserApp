@@ -26,17 +26,22 @@ class CaseFormExisting extends Component {
     from: {}
   };
 
-  schema = {
-    id: Joi.number().optional(),
-    subject: Joi.string()
-      .required()
-      .label("Subject"),
-    dateTimeOfInitialMessage: Joi.string().Optional,
-    timeToResolution: Joi.string().allow(""),
-    closedById: Joi.allow("")
-  };
+  // schema = {
+  //   id: Joi.number().optional(),
+  //   subject: Joi.string()
+  //     .required()
+  //     .label("Subject"),
+  //   dateTimeOfInitialMessage: Joi.string().Optional,
+  //   timeToResolution: Joi.string().allow(""),
+  //   closedById: Joi.allow("")
+  // };
 
   async componentDidMount() {
+    const promise = await this.handleCaseObject();
+    this.setState({ messages: promise.data.messages });
+  }
+
+  handleCaseObject = async () => {
     if (this.props.match.params.id !== "new") {
       const promise = await auth.getUserCaseMessages(
         this.props.match.params.id
@@ -48,16 +53,13 @@ class CaseFormExisting extends Component {
             subject: promise.data.subject,
             dateTimeOfInitialMessage: promise.data.dateTimeOfInitialMessage,
             closedById: promise.data.closedById,
-            timeToResolution:
-              promise.data.timeToResolution !== null
-                ? promise.data.timeToResolution
-                : ""
+            timeToResolution: promise.data.timeToResolution
           }
         });
+        return promise;
       }
-      this.setState({ messages: promise.data.messages });
     }
-  }
+  };
 
   handleCloseCurrentCase = async () => {
     try {
@@ -87,19 +89,30 @@ class CaseFormExisting extends Component {
     this.setState({ newMessage: message });
   };
 
-  handleSubmit = async () => {
+  handleSubmit = e => {
+    // preventDefault prevents the default behavior of this event. In this
+    // case submitting the form to a server, which causes a full page reload.
+    e.preventDefault();
+
+    this.doSubmit();
+  };
+
+  doSubmit = async () => {
+    const newMessage = { ...this.state.newMessage };
     await auth.postNewMessage(
       this.props.match.params.id,
       this.state.newMessage
     );
+    window.location.reload();
   };
 
   render() {
+    console.log(this.state.case.timeToResolution);
     return (
       <div>
         <h1>
           Case Status{" "}
-          {this.state.case.timeToResolution !== "" ? "Closed" : "Open"}
+          {this.state.case.timeToResolution !== null ? "Closed" : "Open"}
         </h1>
         {this.renderValueComponent(this.state.case.subject, "Subject")}
         {this.renderValueComponent(
@@ -112,7 +125,7 @@ class CaseFormExisting extends Component {
             : "Case is Currently Open",
           "Case Closed On"
         )}
-        {this.state.case.timeToResolution !== ""
+        {this.state.case.timeToResolution !== null
           ? this.renderValueComponent(
               `User Id: ${this.state.case.closedById}`,
               "Case Closed By"
@@ -128,7 +141,7 @@ class CaseFormExisting extends Component {
             <p className="form-control">{m.messageText}</p>
           </div>
         ))}
-        {this.state.case.timeToResolution === "" ? (
+        {this.state.case.timeToResolution === null ? (
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label htmlFor="newMessage">
@@ -148,7 +161,7 @@ class CaseFormExisting extends Component {
               />
             </div>
             <button
-              disabled={this.state.newMessage.messageText === ""}
+              disabled={this.state.newMessage.messageText === null}
               className="btn btn-primary"
               style={{ marginBottom: 20 }}
             >
@@ -156,7 +169,7 @@ class CaseFormExisting extends Component {
             </button>
           </form>
         ) : null}
-        {this.state.case.timeToResolution === "" ? (
+        {this.state.case.timeToResolution === null ? (
           <button
             type="submit"
             className="btn btn-primary"

@@ -4,11 +4,6 @@ import Joi from "joi-browser";
 import auth from "../services/authServices";
 
 class AddressForm extends Form {
-  constructor() {
-    super();
-    this.todaysDate = this.getTodaysDate();
-  }
-
   state = {
     data: {
       street: "",
@@ -75,14 +70,18 @@ class AddressForm extends Form {
   }
 
   doSubmit = async () => {
-    if (this.state.data.userId === "") {
+    console.log("Hello from the address form");
+    console.log(this.props.match.params.id);
+    console.log(this.state.data);
+    if (this.props.match.params.id === "new") {
       const user = auth.getCurrentUser();
-      const address = { ...this.state.data };
-      address.userId = user.id;
-      await this.setState({ data: address });
+      const data = { ...this.state.data };
+      data.userId = user.id;
+      await this.setState({ data });
     }
     try {
-      await auth.updateAddress(this.props.match.params.id, this.state.data);
+      const promise = await auth.updateAddress(this.state.data);
+      console.log(promise);
       window.location = "/profile";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
