@@ -96,7 +96,6 @@ class CaseFormExisting extends Component {
   };
 
   render() {
-    console.log(this.state.case);
     return (
       <div>
         <h1>
