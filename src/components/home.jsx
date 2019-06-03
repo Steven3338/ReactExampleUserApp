@@ -7,7 +7,7 @@ const Home = () => {
     <div>
       <h1>Steve's Demo Website</h1>
       <p>
-        This website was build using React. The example data does not include
+        This website was built using React. The example data does not include
         information on real people.
       </p>
       <p>
